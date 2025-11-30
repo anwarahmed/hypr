@@ -1,4 +1,4 @@
-# hypr
+# Hyprland
 
 My Hypr setup for Omarchy Linux
 

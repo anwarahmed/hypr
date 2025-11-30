@@ -1,0 +1,2 @@
+# hypr
+My Hypr setup

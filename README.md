@@ -1,6 +1,6 @@
 # Hyprland
 
-My Hypr setup for Omarchy Linux
+My Hyprland setup for Omarchy Linux
 
 https://hypr.land/
 

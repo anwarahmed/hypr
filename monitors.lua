@@ -29,7 +29,14 @@
 -- panel but is far too large here; 1 lets GTK scale with the monitor instead of
 -- on top of it. Stock scale "auto" picks an integer scale, which rounds this
 -- display up to 2x and oversizes everything, so 1.25 is pinned explicitly.
+-- The @type annotations matter: the fallback below assigns Omarchy's stock
+-- "auto" to the scale, and without them the Lua LSP narrows these to `number`
+-- from the literals here and flags that assignment. `hl.monitor` itself accepts
+-- `string|number` for scale. Annotations sit ABOVE the declarations so the
+-- column-0 `local` lines stay exactly where the sed tools expect them.
+---@type integer
 local omarchy_gdk_scale = 1
+---@type number|string
 local omarchy_monitor_scale = 1.25
 
 -- Machines that want something other than the ThinkPad values above. Add a

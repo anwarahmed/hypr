@@ -97,9 +97,22 @@ These are deliberate. Follow them or state why not.
 
 **Comment every override with what changed and why,** including the stock value it replaces. Files here are read months apart; `-- CHANGED: 250 (default) -> 300` answers the question the diff cannot.
 
-**Machine differences are resolved at load time, not by branching.** `monitors.lua` keys off `/sys/class/dmi/id/product_version` and falls back to Omarchy stock for unlisted hardware, so one branch serves every machine. Extend the `machines` table rather than forking. Use `product_version` (`ThinkPad L14 Gen 1`) over `product_name` (`20U2S20B00`) — readable, and matches any unit of the model.
+**Machine differences are resolved at load time, not by branching.** `monitors.lua` keys off `/sys/class/dmi/id/product_version` so one branch serves every machine — but it must do so within the parsing contract below. Use `product_version` (`ThinkPad L14 Gen 1`) over `product_name` (`20U2S20B00`) — readable, and matches any unit of the model.
 
 ## Gotchas
+
+**`monitors.lua` is parsed and rewritten by shell scripts — it is not free-form Lua.** This is the single easiest way to break this repo, and it fails *silently*.
+
+- `omarchy-hyprland-monitor-scaling` (`SUPER+SLASH`) gates on `grep -q '^local omarchy_monitor_scale = '` and then `sed -i` rewrites that line and `^local omarchy_gdk_scale = `. Both must sit at **column 0** with a lone literal.
+- `omarchy-hyprland-monitor-clamshell` runs at **every startup** and on lid events. It reads the catch-all `hl.monitor` rule's `scale`, and resolves a bare identifier there by finding its `local <name> = <literal>` line. Anything it cannot evaluate — a table lookup like `machine.monitor_scale`, or even `1080 / 720` — fails validation and it falls back to scale **2**.
+
+So keep the shipped shape: two column-0 `local` lines holding literals, and `scale = omarchy_monitor_scale` as a bare identifier. Put per-machine logic *after* those lines, reassigning the variables; the scripts only ever read the first match. The literals must be **this** machine's values, since the scripts run here.
+
+**A config that reloads correctly can still be broken at startup.** `hyprctl reload` is pure Lua and never runs the shell scripts above, so it happily showed `scale: 1.25` while a real login produced `scale: 2` and a giant desktop. To test the startup path without logging out, run the script directly:
+
+```sh
+omarchy-hyprland-monitor-clamshell && hyprctl monitors | grep scale
+```
 
 **`o.launch_on_start` only fires at compositor startup.** It registers an `hl.on("hyprland.start", ...)` handler, so `hyprctl reload` will *not* run it. To test one in a running session, run the wrapped command directly: `uwsm-app -- sunsetr`.
 

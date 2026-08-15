@@ -41,16 +41,22 @@
 hl.unbind("SUPER + ALT + RETURN")
 o.bind("SUPER + ALT + RETURN", "Tmux", [[omarchy-launch-terminal bash -c "tmux attach || tmux new"]])
 
--- Typora. Omarchy binds SUPER+SHIFT+W to Omawrite (its own writing app), so
--- that has to be unbound first. Drop these two lines to get Omawrite back.
-hl.unbind("SUPER + SHIFT + W")
-o.bind("SUPER + SHIFT + W", "Typora", { launch = "typora --enable-wayland-ime" })
+-- Typora and WhatsApp use the key layout from the old hypr-thinkpad branch:
+-- Typora on SUPER+SHIFT+ALT+W, WhatsApp on SUPER+SHIFT+W. Note this is the
+-- opposite of what main's bindings.conf had, where Typora sat on SUPER+SHIFT+W
+-- and WhatsApp on SUPER+SHIFT+ALT+G.
 
--- WhatsApp. This currently resolves to exactly the same command as Omarchy's
--- default, so it is pinned only to keep the "Replaced bindings" set intact and
--- independent of the preinstalled-bindings flag above.
+-- Typora. SUPER+SHIFT+ALT+W is unused by Omarchy, so no unbind is needed.
+o.bind("SUPER + SHIFT + ALT + W", "Typora", { launch = "typora --enable-wayland-ime" })
+
+-- WhatsApp. SUPER+SHIFT+W is Omawrite (Omarchy's own writing app) by default,
+-- so that has to be unbound first.
+hl.unbind("SUPER + SHIFT + W")
+o.bind("SUPER + SHIFT + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
+
+-- Omarchy also keeps WhatsApp on SUPER+SHIFT+ALT+G. Released so WhatsApp
+-- answers to one key only -- drop this line to get the second one back.
 hl.unbind("SUPER + SHIFT + ALT + G")
-o.bind("SUPER + SHIFT + ALT + G", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
 
 -- WINDOW MANAGEMENT ----------------------------------------------------------
 

@@ -6,32 +6,51 @@
 
 -- MIGRATED FROM bindings.conf ------------------------------------------------
 --
--- The old bindings.conf had 35 bindings. 24 of them are now Omarchy defaults
--- with byte-identical keys and commands, so they are NOT repeated here --
--- keeping them would only freeze them against future Omarchy improvements.
+-- The old bindings.conf had 22 app bindings that were an unmodified copy of
+-- Omarchy's own stock list. They are now Omarchy defaults with identical keys
+-- and identical resulting commands, so they are NOT repeated here -- keeping
+-- them would only freeze them against future Omarchy improvements.
 -- Dropped as redundant:
 --
---   SUPER+RETURN Terminal              SUPER+SHIFT+SLASH Passwords
---   SUPER+SHIFT+RETURN Browser         SUPER+SHIFT+A ChatGPT
---   SUPER+SHIFT+F File manager         SUPER+SHIFT+ALT+A Grok
---   SUPER+ALT+SHIFT+F File mgr (cwd)   SUPER+SHIFT+C Calendar
---   SUPER+SHIFT+B Browser              SUPER+SHIFT+E Email
---   SUPER+SHIFT+ALT+B Browser private  SUPER+SHIFT+Y YouTube
---   SUPER+SHIFT+M Music                SUPER+SHIFT+CTRL+G Google Messages
---   SUPER+SHIFT+ALT+M Music TUI        SUPER+SHIFT+P Google Photos
---   SUPER+SHIFT+N Editor               SUPER+SHIFT+X X
---   SUPER+SHIFT+D Docker               SUPER+SHIFT+ALT+X X Post
---   SUPER+SHIFT+G Signal               SUPER+ALT+RETURN Tmux
---   SUPER+SHIFT+O Obsidian             SUPER+SHIFT+ALT+G WhatsApp
+--   SUPER+RETURN Terminal              SUPER+SHIFT+A ChatGPT
+--   SUPER+SHIFT+RETURN Browser         SUPER+SHIFT+ALT+A Grok
+--   SUPER+SHIFT+F File manager         SUPER+SHIFT+C Calendar
+--   SUPER+ALT+SHIFT+F File mgr (cwd)   SUPER+SHIFT+E Email
+--   SUPER+SHIFT+B Browser              SUPER+SHIFT+Y YouTube
+--   SUPER+SHIFT+ALT+B Browser private  SUPER+SHIFT+CTRL+G Google Messages
+--   SUPER+SHIFT+M Music                SUPER+SHIFT+P Google Photos
+--   SUPER+SHIFT+ALT+M Music TUI        SUPER+SHIFT+X X
+--   SUPER+SHIFT+N Editor               SUPER+SHIFT+ALT+X X Post
+--   SUPER+SHIFT+D Docker               SUPER+SHIFT+SLASH Passwords
+--   SUPER+SHIFT+G Signal               SUPER+SHIFT+O Obsidian
 --
--- What remains below is the genuinely personal configuration.
+-- What remains below is the genuinely personal configuration -- everything
+-- that lived in the old file's "##### CUSTOM BINDINGS #####" section.
 
 -- APPS -----------------------------------------------------------------------
+-- These three were the "Replaced bindings" group: stock lines the old config
+-- commented out and re-added in a modified form. All three are pinned here.
+--
+-- Note that Omarchy's versions of these live behind
+-- o.preinstalled_bindings_enabled(), so they would also disappear entirely if
+-- the preinstalled apps were ever removed. Pinning them keeps them working.
+
+-- Tmux. Omarchy's SUPER+ALT+RETURN runs `tmux attach || tmux new -s Work`,
+-- which creates a session NAMED "Work". This uses an unnamed default session
+-- instead, as the old config did.
+hl.unbind("SUPER + ALT + RETURN")
+o.bind("SUPER + ALT + RETURN", "Tmux", [[omarchy-launch-terminal bash -c "tmux attach || tmux new"]])
 
 -- Typora. Omarchy binds SUPER+SHIFT+W to Omawrite (its own writing app), so
 -- that has to be unbound first. Drop these two lines to get Omawrite back.
 hl.unbind("SUPER + SHIFT + W")
 o.bind("SUPER + SHIFT + W", "Typora", { launch = "typora --enable-wayland-ime" })
+
+-- WhatsApp. This currently resolves to exactly the same command as Omarchy's
+-- default, so it is pinned only to keep the "Replaced bindings" set intact and
+-- independent of the preinstalled-bindings flag above.
+hl.unbind("SUPER + SHIFT + ALT + G")
+o.bind("SUPER + SHIFT + ALT + G", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
 
 -- WINDOW MANAGEMENT ----------------------------------------------------------
 

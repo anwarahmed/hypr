@@ -25,13 +25,19 @@
 -- here and must read something valid. Other machines are corrected in the `if`
 -- below, which those tools never see.
 --
--- GDK_SCALE 2 (Omarchy stock) doubles the size of GTK apps, which suits a HiDPI
--- panel but is far too large here; 1 lets GTK scale with the monitor instead of
--- on top of it. Stock scale "auto" picks an integer scale, which rounds this
--- display up to 2x and oversizes everything, so 1.25 is pinned explicitly.
--- The @type annotations matter: the fallback below assigns Omarchy's stock
--- "auto" to the scale, and without them the Lua LSP narrows these to `number`
--- from the literals here and flags that assignment. `hl.monitor` itself accepts
+-- GDK_SCALE is applied here on EVERY machine, not just this one. It only takes
+-- whole numbers, and it multiplies with the compositor's monitor scale, so
+-- Omarchy's stock 2 would have GTK double itself and Hyprland scale that again.
+-- Pinning it to 1 keeps GTK at native size and leaves all scaling to the
+-- monitor, which is the only layer that can do fractional steps. The trade is
+-- slightly softer GTK rendering on a HiDPI machine, in exchange for one
+-- predictable rule everywhere.
+--
+-- Stock scale "auto" picks an integer scale, which rounds this display up to 2x
+-- and oversizes everything, so 1.25 is pinned explicitly for this ThinkPad.
+-- The @type on the monitor scale matters: the fallback below assigns the string
+-- "auto" to it, and without the annotation the Lua LSP narrows it to `number`
+-- from the 1.25 literal and flags that assignment. `hl.monitor` itself accepts
 -- `string|number` for scale. Annotations sit ABOVE the declarations so the
 -- column-0 `local` lines stay exactly where the sed tools expect them.
 ---@type integer
@@ -56,8 +62,8 @@ local function product_version()
 end
 
 if product_version() ~= "ThinkPad L14 Gen 1" then
-  -- Everything else falls back to Omarchy's stock values.
-  omarchy_gdk_scale = 2
+  -- Other machines let Omarchy pick the monitor scale. GDK_SCALE deliberately
+  -- stays 1 everywhere -- see above -- so it is not reassigned here.
   omarchy_monitor_scale = "auto"
 end
 

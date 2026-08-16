@@ -1,19 +1,17 @@
 -- Change the default Omarchy look'n'feel.
 
 -- ACTIVE OVERRIDES -----------------------------------------------------------
--- None. Every setting in this file is currently Omarchy's default.
+-- Rounded corners, below. Everything else in this file is Omarchy's default.
 
--- ROUNDED CORNERS (disabled) -------------------------------------------------
--- Uncomment the hl.config block below for rounded window corners; comment it
--- out again for square. That single value is the whole switch -- there is no
--- second setting to keep in sync.
+-- ROUNDED CORNERS (enabled) --------------------------------------------------
+-- Comment the hl.config block below out again for square corners. That single
+-- value is the whole switch -- there is no second setting to keep in sync.
 --
 -- rounding = 16 came from the old looknfeel.conf, where it was the only
 -- non-empty setting, and was carried through the Lua migration unchanged.
--- Omarchy's own default is rounding = 0, so leaving this commented out is
--- identical to not overriding it at all -- which is why the block is disabled
--- rather than pinned to 0: an explicit 0 would freeze this repo against any
--- future Omarchy change to the default.
+-- Omarchy's own default is rounding = 0, so to go back to square corners
+-- comment the block out rather than setting it to 0: an explicit 0 would
+-- freeze this repo against any future Omarchy change to the default.
 --
 -- Applying a change to this block takes TWO steps, because two processes read
 -- the value and only one of them notices a reload:
@@ -30,11 +28,11 @@
 -- App-drawn menus (GTK/Qt right-click menus inside Firefox, VS Code, and so
 -- on) follow their own toolkit theme and are not affected by either step.
 --
--- hl.config({
---   decoration = {
---     rounding = 16,
---   },
--- })
+hl.config({
+  decoration = {
+    rounding = 16,
+  },
+})
 
 -- The old conf's general{}, animations{}, layout{} and scrolling{} blocks were
 -- all empty, so gaps, borders, animations and layout have never been

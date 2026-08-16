@@ -1,17 +1,17 @@
 -- Change the default Omarchy look'n'feel.
 
 -- ACTIVE OVERRIDES -----------------------------------------------------------
--- Migrated from the old looknfeel.conf, which set: decoration { rounding = 16 }
+-- None. Every setting in this file is Omarchy's default.
 --
--- CHANGED: rounding 0 (Omarchy default) -> 16. Rounded window corners.
--- This was the only non-empty setting in looknfeel.conf; its general{},
--- animations{}, layout{} and scrolling{} blocks were all empty, so Omarchy's
--- defaults for gaps, borders, animations and layout are used unchanged.
-hl.config({
-  decoration = {
-    rounding = 16,
-  },
-})
+-- DROPPED: decoration { rounding = 16 }, which gave windows rounded corners.
+-- It came from the old looknfeel.conf, where it was the only non-empty
+-- setting, and was carried through the Lua migration unchanged. Removed in
+-- favour of Omarchy's default rounding = 0, i.e. square corners -- keeping it
+-- pinned would only freeze this repo against future Omarchy changes.
+--
+-- The conf's general{}, animations{}, layout{} and scrolling{} blocks were
+-- already empty, so gaps, borders, animations and layout were never
+-- overridden here either.
 
 -- REFERENCE EXAMPLES ---------------------------------------------------------
 -- Everything below is commented-out Omarchy scaffolding, kept for reference.

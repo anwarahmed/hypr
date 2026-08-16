@@ -1,17 +1,44 @@
 -- Change the default Omarchy look'n'feel.
 
 -- ACTIVE OVERRIDES -----------------------------------------------------------
--- Migrated from the old looknfeel.conf, which set: decoration { rounding = 16 }
+-- None. Every setting in this file is currently Omarchy's default.
+
+-- ROUNDED CORNERS (disabled) -------------------------------------------------
+-- Uncomment the hl.config block below for rounded window corners; comment it
+-- out again for square. That single value is the whole switch -- there is no
+-- second setting to keep in sync.
 --
--- CHANGED: rounding 0 (Omarchy default) -> 16. Rounded window corners.
--- This was the only non-empty setting in looknfeel.conf; its general{},
--- animations{}, layout{} and scrolling{} blocks were all empty, so Omarchy's
--- defaults for gaps, borders, animations and layout are used unchanged.
-hl.config({
-  decoration = {
-    rounding = 16,
-  },
-})
+-- rounding = 16 came from the old looknfeel.conf, where it was the only
+-- non-empty setting, and was carried through the Lua migration unchanged.
+-- Omarchy's own default is rounding = 0, so leaving this commented out is
+-- identical to not overriding it at all -- which is why the block is disabled
+-- rather than pinned to 0: an explicit 0 would freeze this repo against any
+-- future Omarchy change to the default.
+--
+-- Applying a change to this block takes TWO steps, because two processes read
+-- the value and only one of them notices a reload:
+--
+--   hyprctl reload            -- Hyprland window corners, takes effect at once
+--   omarchy restart shell     -- menus, popups, notifications, panels
+--
+-- The second step is not optional. omarchy-shell mirrors Hyprland's
+-- decoration:rounding into its own Style.cornerRadius (see
+-- /usr/share/omarchy/shell/Commons/Style.qml), but it only re-reads it via
+-- `hyprctl getoption` at shell startup or when a theme is applied. Skip the
+-- restart and windows go square while every menu stays rounded.
+--
+-- App-drawn menus (GTK/Qt right-click menus inside Firefox, VS Code, and so
+-- on) follow their own toolkit theme and are not affected by either step.
+--
+-- hl.config({
+--   decoration = {
+--     rounding = 16,
+--   },
+-- })
+
+-- The old conf's general{}, animations{}, layout{} and scrolling{} blocks were
+-- all empty, so gaps, borders, animations and layout have never been
+-- overridden here either -- they are Omarchy's defaults.
 
 -- REFERENCE EXAMPLES ---------------------------------------------------------
 -- Everything below is commented-out Omarchy scaffolding, kept for reference.

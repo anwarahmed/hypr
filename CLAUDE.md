@@ -32,13 +32,23 @@ hyprctl binds -j                             # full detail; dispatcher shows as 
 
 `hyprctl binds` reports Lua dispatchers opaquely as `__lua` with an arg index, so it proves *which key is bound to what description*, not the command behind it. Use it to detect duplicate or missing binds; read the source for the command.
 
-The four remaining `.conf` files are **not** read by Hyprland and `hyprctl` neither applies nor validates them:
+The two remaining `.conf` files are **not** read by Hyprland and `hyprctl` neither applies nor validates them:
 
 | File | Read by | Apply with |
 |---|---|---|
 | `hyprsunset.conf` | hyprsunset | `omarchy restart hyprsunset` |
 | `xdph.conf` | xdg-desktop-portal-hyprland | next login |
-| `hypridle.conf`, `hyprlock.conf` | hypridle / hyprlock | their own processes |
+
+`hyprsunset.conf` is dormant here by choice — `autostart.lua` runs `sunsetr` instead, so nothing reads it, and `omarchy toggle nightlight` (which drives hyprsunset over `hyprctl hyprsunset temperature`) has nothing to talk to. Omarchy still ships and supports the file, so it stays.
+
+**Idle and lock are not configured in this repo at all.** Omarchy Quattro retired the `hypridle` and `hyprlock` packages — they are in the `retired_packages` list in `/usr/share/omarchy/bin/omarchy-upgrade-to-quattro` and are uninstalled on upgrade — and moved both jobs into the Quickshell `omarchy-shell` process. `hypridle.conf` and `hyprlock.conf` were therefore deleted from this repo; editing them changed nothing:
+
+| Was | Is now |
+|---|---|
+| `hypridle.conf` timeouts | `idle.screensaver` / `idle.lock` in `~/.config/omarchy/shell.json`, in seconds since idle began — so both are absolute, not the old "half + margin" arithmetic |
+| `hyprlock.conf` appearance | `omarchy-shell`'s lock plugin (`/usr/share/omarchy/shell/plugins/lock/LockView.qml`); auth is set up with `omarchy apply lock` |
+
+`~/.config/omarchy` is a separate git repo with its own PR history, so an idle-timeout change belongs there, not here. Verify one with `omarchy-shell idle status`.
 
 ## Architecture
 

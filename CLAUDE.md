@@ -103,7 +103,7 @@ These are deliberate. Follow them or state why not.
 
 **Verify "same as default" against the real command, not the key.** Two bindings on the same key can still differ. Read the launcher script (`cat /usr/bin/omarchy-launch-foo`) before concluding a binding is redundant. Real example: Omarchy's Tmux binding runs `tmux attach || tmux new -s Work`, creating a session *named* `Work`; this repo deliberately uses an unnamed session, so it must stay pinned.
 
-**Always `hl.unbind()` before rebinding a key Omarchy already uses,** and say in a comment what the key used to do so it can be restored.
+**Use `o.rebind()` to replace a key Omarchy already uses** (it is `hl.unbind()` then `o.bind()`, from Omarchy's `helpers.lua`), and say in a comment what the key used to do so it can be restored. A key with two binds gets `o.rebind` for the first and `o.bind` for the second — a second `o.rebind` would unbind the first. Use a bare `hl.unbind()` only to switch a default off.
 
 **Comment every override with what changed and why,** including the stock value it replaces. Files here are read months apart; `-- CHANGED: 250 (default) -> 300` answers the question the diff cannot.
 

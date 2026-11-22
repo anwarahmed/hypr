@@ -91,8 +91,9 @@ hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 --   },
 -- })
 
--- App-specific touchpad scroll speeds (both are Omarchy defaults already).
--- o.window("(Alacritty|kitty|foot)", { scroll_touchpad = 1.5 })
+-- App-specific touchpad scroll speeds (all three are Omarchy defaults already).
+-- o.window("(Alacritty|kitty)", { scroll_touchpad = 1.5 })
+-- o.window("foot", { scroll_touchpad = 2.0 })
 -- o.window("com.mitchellh.ghostty", { scroll_touchpad = 0.2 })
 
 -- Enable touchpad gestures for moving focus (helpful on scrolling layout).

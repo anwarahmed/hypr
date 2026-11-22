@@ -1,5 +1,5 @@
--- Keep only your personal keybinding overrides here. Add new bindings or
--- unbind defaults before replacing them.
+-- Keep only your personal keybinding overrides here. Add new bindings with
+-- o.bind or replace defaults with o.rebind.
 
 -- See current bindings and descriptions:
 --   omarchy menu keybindings --print
@@ -38,8 +38,7 @@
 -- Tmux. Omarchy's SUPER+ALT+RETURN runs `tmux attach || tmux new -s Work`,
 -- which creates a session NAMED "Work". This uses an unnamed default session
 -- instead, as the old config did.
-hl.unbind("SUPER + ALT + RETURN")
-o.bind("SUPER + ALT + RETURN", "Tmux", [[omarchy-launch-terminal bash -c "tmux attach || tmux new"]])
+o.rebind("SUPER + ALT + RETURN", "Tmux", [[omarchy-launch-terminal bash -c "tmux attach || tmux new"]])
 
 -- Typora and WhatsApp use the key layout from the old hypr-thinkpad branch:
 -- Typora on SUPER+SHIFT+ALT+W, WhatsApp on SUPER+SHIFT+W. Note this is the
@@ -50,9 +49,8 @@ o.bind("SUPER + ALT + RETURN", "Tmux", [[omarchy-launch-terminal bash -c "tmux a
 o.bind("SUPER + SHIFT + ALT + W", "Typora", { launch = "typora --enable-wayland-ime" })
 
 -- WhatsApp. SUPER+SHIFT+W is Omawrite (Omarchy's own writing app) by default,
--- so that has to be unbound first.
-hl.unbind("SUPER + SHIFT + W")
-o.bind("SUPER + SHIFT + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
+-- so it is rebound rather than added.
+o.rebind("SUPER + SHIFT + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
 
 -- Omarchy also keeps WhatsApp on SUPER+SHIFT+ALT+G. Released so WhatsApp
 -- answers to one key only -- drop this line to get the second one back.
@@ -74,11 +72,10 @@ o.bind("CTRL + LEFT", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
 -- Stock Omarchy: SUPER+TAB = next workspace, SUPER+SHIFT+TAB = previous.
 -- Two bindings share each key on purpose -- Hyprland runs both, so the window
 -- is raised as well as focused. This mirrors how Omarchy wires its own
--- ALT+TAB, which is then repurposed for groups below.
-hl.unbind("SUPER + TAB")
-hl.unbind("SUPER + SHIFT + TAB")
-o.bind("SUPER + TAB", "Cycle to next window", hl.dsp.window.cycle_next())
-o.bind("SUPER + SHIFT + TAB", "Cycle to prev window", hl.dsp.window.cycle_next({ next = false }))
+-- ALT+TAB, which is then repurposed for groups below. Only the first bind on
+-- each key is o.rebind: a second o.rebind would unbind the first.
+o.rebind("SUPER + TAB", "Cycle to next window", hl.dsp.window.cycle_next())
+o.rebind("SUPER + SHIFT + TAB", "Cycle to prev window", hl.dsp.window.cycle_next({ next = false }))
 o.bind("SUPER + TAB", "Reveal active window on top", hl.dsp.window.bring_to_top())
 o.bind("SUPER + SHIFT + TAB", "Reveal active window on top", hl.dsp.window.bring_to_top())
 
@@ -86,10 +83,8 @@ o.bind("SUPER + SHIFT + TAB", "Reveal active window on top", hl.dsp.window.bring
 -- (that job now belongs to SUPER+TAB above).
 -- Stock Omarchy: ALT+TAB = cycle windows; groups live on SUPER+ALT+TAB, which
 -- is left alone and still works.
-hl.unbind("ALT + TAB")
-hl.unbind("ALT + SHIFT + TAB")
-o.bind("ALT + TAB", "Next window in group", hl.dsp.group.next())
-o.bind("ALT + SHIFT + TAB", "Previous window in group", hl.dsp.group.prev())
+o.rebind("ALT + TAB", "Next window in group", hl.dsp.group.next())
+o.rebind("ALT + SHIFT + TAB", "Previous window in group", hl.dsp.group.prev())
 
 -- REFERENCE EXAMPLES ---------------------------------------------------------
 
@@ -104,10 +99,13 @@ o.bind("ALT + SHIFT + TAB", "Previous window in group", hl.dsp.group.prev())
 -- Add a new binding.
 -- o.bind("SUPER + SHIFT + R", "SSH", "alacritty -e ssh your-server")
 
+-- Change an existing binding. o.rebind takes the same arguments as o.bind.
+-- This example replaces the default file manager with Flea.
+-- o.rebind("SUPER + SHIFT + F", "File manager", { launch = "flea" })
+
 -- Disable a default binding without replacing it.
 -- hl.unbind("SUPER + SHIFT + B")
 
 -- Logitech MX Keys examples:
--- o.bind("SUPER + SHIFT + S", nil, "omarchy-capture-screenshot")
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
--- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
+-- o.bind("SUPER + PERIOD", nil, { panel = "omarchy.emojis" })
